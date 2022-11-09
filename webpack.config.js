@@ -14,7 +14,12 @@ module.exports = {
     module: {
       rules: [
         {
-          test: /\.tsx$/,            // 拡張子 .ts のファイルを
+          test: /\.tsx$/,         // 拡張子 .ts のファイルを
+          use: 'ts-loader',         // ts-loaderでトランスパイルする
+          exclude: /node_modules/,  // ただし外部ライブラリは除く
+        },
+        {
+          test: /\.ts$/,         // 拡張子 .ts のファイルを
           use: 'ts-loader',         // ts-loaderでトランスパイルする
           exclude: /node_modules/,  // ただし外部ライブラリは除く
         },
@@ -27,7 +32,7 @@ module.exports = {
     resolve: {
       modules: [path.resolve(__dirname, 'src'), path.resolve(__dirname, 'node_modules')],
       extensions: [
-       '.tsx', '.js'
+       '.tsx', '.js','.ts'
       ]
      },
     mode:'development',
