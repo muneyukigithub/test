@@ -1,10 +1,9 @@
 export default class world {
   message: string
-  
 
   constructor(message: string) {
     this.message = message
-    const test:string = "sring"
+    const test = 'sring'
   }
 
   public sayhello(elem: HTMLElement | null) {
