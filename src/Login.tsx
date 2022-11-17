@@ -1,16 +1,16 @@
-import { Link } from "react-router-dom";
-import React from "react";
+import { Link } from 'react-router-dom'
+import React from 'react'
 
-const Login:React.FC=()=> {
+const Login: React.FC = () => {
   return (
     <>
-    <h1>ログインページ</h1>
-    <div>
+      <h1>ログインページ</h1>
+      <div>
         新規登録は<Link to={`/register/`}>こちら</Link>
-    </div>
-    <div>
+      </div>
+      <div>
         <Link to={`/`}>ホームに戻る</Link>
-    </div>
+      </div>
     </>
   )
 }

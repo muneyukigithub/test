@@ -1,29 +1,23 @@
-import React,{useState} from 'react'
-import {Button, Drawer} from "@mui/material";
-import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import { mainListItems, secondaryListItems } from './listi';
+import React, { useState } from 'react'
+import { Button, Drawer } from '@mui/material'
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'
+import { mainListItems, secondaryListItems } from './listi'
 
-const Sidebar:React.FC = () => {
-  const [op,setop] = useState(true)
-  const toggleopen = () =>{ 
-    setop(!op);
-    console.log(op);
+const Sidebar: React.FC = () => {
+  const [op, setop] = useState(true)
+  const toggleopen = () => {
+    setop(!op)
+    console.log(op)
   }
 
   return (
     <div>
-      
-      <Drawer
-      anchor="left"
-      open={op}
-      onClose={toggleopen}>
+      <Drawer anchor="left" open={op} onClose={toggleopen}>
+        <button onClick={toggleopen}>
+          <ChevronLeftIcon />
+        </button>
 
-      <button onClick={toggleopen}>
-      <ChevronLeftIcon />
-      </button>
-
-        { mainListItems }
-
+        {mainListItems}
       </Drawer>
     </div>
   )

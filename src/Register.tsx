@@ -1,17 +1,18 @@
-import { Link } from "react-router-dom"
-import React from "react"
+import { Link } from 'react-router-dom'
+import React from 'react'
 
-const Register:React.FC = () =>{
-    return  <>
-    <h1>新規登録ページ</h1>
-    <div>
-      ログインは<Link to={`/login/`}>こちら</Link>
-    </div>
-    <div>
-      <Link to={`/`}>ホームに戻る</Link>
-    </div>
-  </>
-
+const Register: React.FC = () => {
+  return (
+    <>
+      <h1>新規登録ページ</h1>
+      <div>
+        ログインは<Link to={`/login/`}>こちら</Link>
+      </div>
+      <div>
+        <Link to={`/`}>ホームに戻る</Link>
+      </div>
+    </>
+  )
 }
 
-export default Register;
+export default Register
