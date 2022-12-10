@@ -10,9 +10,17 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { useState } from 'react'
 import { red } from '@mui/material/colors';
 
-const Smalltask:React.FC<{editflag:boolean,seteditflag:Dispatch<SetStateAction<boolean>>}> = ({editflag}) => {
+interface item {
+  smalltask_id: string
+	smalltask: string
+	task_id:string
+}
+
+const Smalltask:React.FC<{editflag:boolean,taskdata:item[]}> = ({editflag,taskdata}) => {
 
   const [todocount,settodocount] = useState(2);
+  const [t,sett] = useState([{id:"0",data:""}]);
+
 
   // const addsmalltaskform = () => {
   //   settodocount(todocount+1);
@@ -22,28 +30,60 @@ const Smalltask:React.FC<{editflag:boolean,seteditflag:Dispatch<SetStateAction<b
   //   settodocount(todocount-1);
   // }
 
+  const handlechange = (e:any) =>{
+    for(let i=0;i<t.length;i++){
+      console.log(t[i].id);
+      // console.log();
+      if(t[i].id===e.target.id){
+        // console.log("一致");
+        t[i].data = e.target.value;
+        sett(t);
+        console.log(t);
+        return;
+      }
+    }
+
+    
+    // 脳内で実際に新しいものを作る
+
+    sett([...t,{id:String(t.length),data:""}]);
+    console.log(t);
+    // console.log(e.target.id);
+  }
+
   const getformlist = () =>{
-    const formlist = [];
-    for(let i=0;i<todocount;i++){
-      formlist.push(<ListItem>
+
+    const formlist:any[] = [];
+    const typolist:any[] = [];
+
+    // for(let i=0;i<todocount;i++){
+      taskdata.map((value,index)=>{
+
+      formlist.push(
+      <ListItem>
         <TextField
         fullWidth
-        id="standard-search"
+        id={value.smalltask_id}
         label="このタスクを入力してください!"
         type="search"
-        variant="standard"/>
+        variant="standard"
+        onChange={handlechange}
+        />
 
         <Button onClick={()=>{settodocount(todocount-1)}}>
         <DeleteIcon sx={{color:red[500],ml:2}}/>    
         </Button>
+      </ListItem>)
 
+      typolist.push(
+      <ListItem>
+        <Typography>{value.smalltask}</Typography> 
         </ListItem>)
-    }
-    return formlist  
+    })
+    return [formlist,typolist] 
   }
 
-  const formlist = getformlist();
-
+  const [formlist,typolist]  = getformlist();
 
   return (
     <Card sx={{
@@ -69,7 +109,11 @@ const Smalltask:React.FC<{editflag:boolean,seteditflag:Dispatch<SetStateAction<b
       <List disablePadding>
       {formlist}
       </List> 
-      :<Typography>確定内容</Typography>
+      :<List disablePadding>
+      <Typography>
+        {typolist}
+      </Typography>
+      </List> 
       }
 
     {/* <TextField

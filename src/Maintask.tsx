@@ -1,10 +1,27 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Dispatch, SetStateAction } from "react";
 
 import { Card ,Box,TextField, Typography,Button} from '@mui/material'
 
-const Maintask:React.FC<{editflag:boolean,seteditflag:Dispatch<SetStateAction<boolean>>,taskdata:object}> 
-= ({editflag,seteditflag,taskdata}) => {
+interface maintaskstate {
+  task_id:string
+}
+
+const Maintask:React.FC<{editflag:boolean,task_id:string,taskdata:string,maintaskform:any,setmaintaskform:any}>
+= ({editflag,task_id,taskdata,maintaskform,setmaintaskform}) => {
+
+  // ,changehandle:(event:any)=>void
+
+  console.log(taskdata);
+
+  const handlechange =(e:any) =>{
+    
+    // maintaskform = e.target.value;
+    
+    setmaintaskform([...maintaskform,{form:e.target.value}]);
+    // setmaintaskform({...maintaskform,task_id:e.target.value})
+    console.log(maintaskform);
+  }
 
 
 
@@ -35,9 +52,10 @@ const Maintask:React.FC<{editflag:boolean,seteditflag:Dispatch<SetStateAction<bo
           label="このタスクを入力してください"
           type="search"
           variant="standard"
+          onChange={handlechange}
         />
         )
-        :(<Typography>確定内容</Typography>)
+        :(<Typography>{taskdata}</Typography>)
 
 }
         </Box>

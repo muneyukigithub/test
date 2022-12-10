@@ -4,7 +4,7 @@ import { Dispatch, SetStateAction } from "react";
 
 
 
-const Motivate:React.FC<{editflag:boolean,seteditflag:Dispatch<SetStateAction<boolean>>,taskdata:object}> = ({editflag,seteditflag,taskdata}) => {
+const Motivate:React.FC<{editflag:boolean,taskdata:object}> = ({editflag,taskdata}) => {
     
     
     return (

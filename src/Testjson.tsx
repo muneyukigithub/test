@@ -2,9 +2,23 @@ export const Testjson_2 = [
     {name:"satou"}
 ]
 
-export const Testjson:object[] = [
+interface item {
+    smalltask_id: string
+      smalltask: string
+      task_id:string
+  }
+  
+  interface Array {
+    task_id:string
+    task:string
+    created_at:string
+    smalltask:item[]
+  }
+
+
+export const Testjson:Array[] = [
 	{
-		"task_id": "be0f4ab2-ee0a-474f-919a-540fb3de16df",
+		"task_id": "iu0f4ab2-ee0a-474f-919a-540fb3de16df",
 		"task": "甘いもの食べる",
 		"created_at": "2022-11-21",
 		"smalltask": [
