@@ -44,6 +44,7 @@ import Smalltask from 'Smalltask'
 import Motivate from 'Motivate'
 import Sample from 'Sample'
 import { Testjson } from 'Testjson'
+import { useEffect } from 'react'
 
 //関数コンポーネントがchildrenを受け取る場合の型定義
 // type Props = {
@@ -74,12 +75,23 @@ interface item {
 	task_id:string
 }
 
+interface formtype {
+	task_id:string
+  form: string
+}
+
+interface smallformtype {
+	task_id:string
+  form: string[]
+}
+
 interface taskArray {
   task_id:string
   edit:boolean
   task:string
+  motivate:string
   created_at:string
-  smalltask:item[]
+  smalltask:string[]
 }
 
 const count = 1
@@ -96,6 +108,10 @@ const theme = createTheme({
 const Main: React.FC = () => {
   // Generate Order Data
   console.log("Main.tsx");
+
+  useEffect(()=>{
+    addtask();
+  },[])
 
 
 
@@ -122,18 +138,22 @@ const Main: React.FC = () => {
   // console.log(test2);
 
   // const [tasks, settasks] = useState([{ id: 1, value: 'content field', edit: true }])
-  const [tasks, settasks] = useState(taskjson);
+  // const [tasks, settasks] = useState(taskjson);
+  const [tasks, settasks] = useState<taskArray[]>([]);
+
   const [anchorEl, setAnchorEL] = useState(null)
   const isMenuOpen = Boolean(anchorEl)
   const [currentRow, setCurrentRow] = React.useState(null)
 
-  const [maintaskform,setmaintaskform] = useState([{task_id:"iu0f4ab2-ee0a-474f-919a-540fb3de16df",form:""},{task_id:"be0f4ab2-ee0a-474f-919a-540fb3de16df",form:""}]);
+  // const [maintaskform,setmaintaskform] = useState([{task_id:"iu0f4ab2-ee0a-474f-919a-540fb3de16df",form:""},{task_id:"be0f4ab2-ee0a-474f-919a-540fb3de16df",form:""}]);
   // const [maintaskform,setmaintaskform] = useState({});
-  const [motivatetaskform,setmotivateform] = useState();
+  const [maintaskform,setmaintaskform] = useState<formtype[]>([]);
+  // const [motivatetaskform,setmotivateform] = useState<formtype[]>([{task_id:"iu0f4ab2-ee0a-474f-919a-540fb3de16df",form:""},{task_id:"be0f4ab2-ee0a-474f-919a-540fb3de16df",form:""}]);
+  const [motivatetaskform,setmotivateform] = useState<formtype[]>([]); 
+  const [smalltaskform,setsmalltaskform] = useState<smallformtype[]>([]);
 
   // 編集フラグ
   // const [edit,setedit] = React.useState<boolean>(true);
-
   const [editid, seteditid] = React.useState(null)
 
   const list: any[] = []
@@ -144,24 +164,26 @@ const Main: React.FC = () => {
 
   const createtaskobject = () => {
     // return { id: tasks.length + 1, value: '', edit: true }
-    return { task_id:uuid4(),edit:true,task:"",created_at:"",smalltask:[]};
+    return { task_id:uuid4(),edit:true,motivate:"",task:"",created_at:"",smalltask:[]};
   }
 
   const addtask = () => {
 
     // console.log(tasks);
-    const newtasks = tasks;
+    const newtasks = tasks.slice();
+    const newuuid = uuid4();
+    newtasks[newtasks.length] = { task_id:newuuid,edit:true,motivate:"",task:"",created_at:"",smalltask:[]};
+    settasks(newtasks);
+    
+    setmaintaskform([...maintaskform,{task_id:newuuid,form:""}])
+    setmotivateform([...motivatetaskform,{task_id:newuuid,form:""}])
+    setsmalltaskform([...smalltaskform,{task_id:newuuid,form:[]}])
 
-    console.log(tasks.length);
-
-    newtasks[tasks.length] = createtaskobject();
-
-    console.log(tasks.length);
-    newtasks[tasks.length].smalltask[0]= {
-      "smalltask_id": "be451694-3bc5-4139-8a8b-51778b7e51d1",
-      "smalltask": "newsmall",
-      "task_id": "be0f4ab2-ee0a-474f-919a-540fb3de16df"
-    }
+    // newtasks[tasks.length].smalltask[0]= {
+    //   "smalltask_id": "be451694-3bc5-4139-8a8b-51778b7e51d1",
+    //   "smalltask": "newsmall",
+    //   "task_id": "be0f4ab2-ee0a-474f-919a-540fb3de16df"
+    // }
 
     // console.log(newtasks);
     // settasks();
@@ -169,6 +191,16 @@ const Main: React.FC = () => {
     // settasks([...taskjson, createtaskobject()])
     // taskjson = [...taskjson, createtaskobject()]
   }
+
+
+  const test = (e:any) =>{
+    console.log(maintaskform);
+    console.log(motivatetaskform);
+    console.log(smalltaskform);
+    console.log(tasks[0]);
+
+  }
+
 
   const handlesetanchor = (event: any) => {
     setAnchorEL(event.currentTarget)
@@ -189,6 +221,14 @@ const Main: React.FC = () => {
 
   //   settasks(newlist)
   // }
+
+  const addsmalltask =(e:any)=>{
+    console.log(e.target.id);
+  
+    settasks((mapstate:taskArray[])=>mapstate.map((value:taskArray)=>value.task_id===e.target.id
+    ?{...value,smalltask:[...value.smalltask,""]}
+    :value))
+  }
 
   const handleOpenMenu = (event: any, row: any) => {
     setAnchorEL(event.currentTarget)
@@ -222,13 +262,28 @@ const Main: React.FC = () => {
 
   //   console.log(state);
 
+
+  // setmaintaskform((mapstate:any)=>mapstate.map((v:{task_id:string,form:string})=>v.task_id===task_id?
+  // {...v,form:e.target.value}:v));
+
+
+
   const editchange=(e:any)=>{
   console.log(maintaskform)
 
-  
-  
+  const newtasks = tasks.slice();
 
+  for (let i = 0; i < tasks.length; i++){
+    for (let j = 0; j < maintaskform.length; j++){
+      if(tasks[i].task_id===maintaskform[j].task_id){
+        newtasks[i].task = maintaskform[j].form
+        newtasks[i].motivate = motivatetaskform[i].form
+        newtasks[i].smalltask = smalltaskform[i].form
+      }
+    }
+  }
 
+  console.log(newtasks);
 
     
 //     const [state, setState] = useState(['foo', 'bar']);
@@ -238,12 +293,12 @@ const Main: React.FC = () => {
 //     prevState.map((value) => (value === 'bar' ? 'new' : value))
 //   );
 
-
-    settasks((prevstate)=>
-    prevstate.map((value)=>value.task_id === e.target.id? 
+    settasks(newtasks.map((value)=>value.task_id === e.target.id? 
     {...value,edit:!value.edit}:value))
 
-    console.log(tasks);
+    // settasks((newtasks)=>
+    // newtasks.map((value)=>value.task_id === e.target.id? 
+    // {...value,edit:!value.edit}:value))
     
     // for(let i=0;i<tasks.length;i++){
     //   console.log(tasks[i].task_id);
@@ -333,12 +388,12 @@ const Main: React.FC = () => {
 
         {/* モチベータフェーズコンポーネント */}
         <Grid item>
-        <Motivate editflag={edit} taskdata={task}/>
+        <Motivate editflag={edit} task_id={task.task_id} taskdata={task.motivate} motivatetaskform={motivatetaskform} setmotivatetaskform={setmotivateform}/>
         </Grid>
         
         {/* 細分化フェーズコンポーネント */}
         <Grid item>
-        <Smalltask editflag={edit} taskdata={task.smalltask}/>
+        <Smalltask editflag={edit} task_id={task.task_id} taskdata={task.smalltask} smalltaskform={smalltaskform} setsmalltaskform={setsmalltaskform} addsmalltask={addsmalltask}/>
         </Grid>
 
         </Grid>
@@ -402,7 +457,7 @@ const Main: React.FC = () => {
             <Button variant="contained" sx={{ width: '100px', ml: '20px' }}>
               使い方
             </Button>
-            <Button variant="contained" sx={{ width: '100px', ml: '20px' }}>
+            <Button variant="contained" sx={{ width: '100px', ml: '20px' }} onClick={test}>
               ログイン
             </Button>
           </Box>

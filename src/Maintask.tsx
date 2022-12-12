@@ -12,13 +12,20 @@ const Maintask:React.FC<{editflag:boolean,task_id:string,taskdata:string,maintas
 
   // ,changehandle:(event:any)=>void
 
-  console.log(taskdata);
+  console.log("Maintask.tsx");
 
   const handlechange =(e:any) =>{
     
     // maintaskform = e.target.value;
-    
-    setmaintaskform([...maintaskform,{form:e.target.value}]);
+    // const newform = maintaskform.slice();
+    // newform[0].form = e.target.value;
+    // settasks((prevstate)=>
+    // prevstate.map((value)=>value.task_id === e.target.id? 
+    // {...value,edit:!value.edit}:value))
+
+    setmaintaskform((mapstate:any)=>mapstate.map((v:{task_id:string,form:string})=>v.task_id===task_id?
+    {...v,form:e.target.value}:v));
+    // setmaintaskform([...maintaskform,{form:e.target.value}]);
     // setmaintaskform({...maintaskform,task_id:e.target.value})
     console.log(maintaskform);
   }
@@ -52,6 +59,7 @@ const Maintask:React.FC<{editflag:boolean,task_id:string,taskdata:string,maintas
           label="このタスクを入力してください"
           type="search"
           variant="standard"
+          defaultValue={taskdata}
           onChange={handlechange}
         />
         )
