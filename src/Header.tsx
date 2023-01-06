@@ -6,7 +6,7 @@ import { useAuth } from 'AuthContext'
 export const Header = () => {
     const Auth = useAuth();
     const username = Auth.user;
-    return <AppBar sx={{ backgroundColor: "Transparent", top: 0, position: "static" }}>
+    return <AppBar sx={{ backgroundColor: "Transparent", top: 0, position: "fixed" }}>
         <Toolbar sx={{ minHeight: "16px" }}>
             {/* <Box
         sx={{

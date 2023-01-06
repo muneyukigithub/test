@@ -12,6 +12,11 @@ import Link from '@mui/material/Link';
 import { Link as RouterLink } from 'react-router-dom'
 
 const UserDeactivateComplete = () => {
+
+    const location = useLocation();
+    const username = location.state.username;
+
+
     return (
         <Box
             sx={{
@@ -21,15 +26,14 @@ const UserDeactivateComplete = () => {
             }}>
 
             <Typography>ユーザー退会が完了しました。</Typography>
-            <Typography gutterBottom>admin@admin.com</Typography>
+            <Typography gutterBottom>{username}</Typography>
             <Link
                 component={RouterLink}
                 to={"/main"}
                 color="primary"
                 variant='h6'
-
                 sx={{ textDecoration: "None", pt: 2 }}
-            >ホームへ
+            >ホーム
             </Link>
             <CssBaseline />
         </Box >

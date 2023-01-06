@@ -39,34 +39,61 @@ export const AuthProvider: React.FC<any> = ({ children }) => {
     }
 
     const execlogin = async (username: any, password: any) => {
-        // const loginuser = { "loginuser": "" }
+        // login処理fetch
+        // login処理fetchがfalseならreturn false
+        // user処理fetch
+        // login処理fetchがfalseならreturn false
+        // return true
 
-        await fetch("http://127.0.0.1:8000/api/v1/token/", {
+        const loginFetchResult = await fetch("http://127.0.0.1:8000/api/v1/token/", {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',
             },
             credentials: 'include',
             body: JSON.stringify({ "email": username, "password": password })
-            // body: JSON.stringify({ email: "admin@admin.com", password: "password" })
 
-        }).then(() => {
+        }).then((response) => {
 
-            const res = fetch("http://127.0.0.1:8000/api/v1/user/", {
-                method: "GET",
-                credentials: 'include',
-            })
-            return Promise.resolve(res);
-        }).then((res) => {
-            return Promise.resolve(res.json())
-        }).then(json => {
-            // loginuser["loginuser"] = json.username;
-            setuser(json.username)
-            setIsAuth(true)
+            if (response.ok === false) {
+                throw new Error("認証エラー");
+            }
+
+            return true
+
         }).catch(error => {
+            console.log("error")
+            console.error('通信に失敗', error)
+
+            return false
+        })
+
+        if (!loginFetchResult) {
+            return false;
+        }
+
+        const userFetchResult = await fetch("http://127.0.0.1:8000/api/v1/user/", {
+            method: "GET",
+            credentials: 'include'
+        }).then((response) => {
+            if (response.ok === false) {
+                throw new Error("認証エラー");
+            }
+
+            return response.json()
+        }).then(response => {
+            setuser(response.username)
+            setIsAuth(true)
+            return true
+        }).catch(error => {
+            console.log("error")
             console.error('通信に失敗', error)
             return false
         })
+
+        if (!loginFetchResult) {
+            return false;
+        }
 
         return true
     }

@@ -59,22 +59,19 @@ export default function SignIn() {
         console.log(password);
     }
 
-    const signin = (event: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
 
-        console.log("signin 到達")
-        Auth.login(data.get('email'), data.get('password')).then((response: any) => {
-            console.log(response)
-            // if (!(loginuser === "")) {
-            //     navigate("/main")
-
-            // }            
+        Auth.login(data.get('email'), data.get('password')).then((result: any) => {
+            console.log(result)
+            if (result) {
+                navigate("/main")
+            }
         })
-
     }
 
-    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit_ = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
 
@@ -113,7 +110,7 @@ export default function SignIn() {
                 <Typography component="h1" variant="h5">
                     ログイン
                 </Typography>
-                <Box component="form" onSubmit={signin} noValidate sx={{ mt: 1 }}>
+                <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
                     <TextField
                         onChange={changeuser}
                         margin="normal"

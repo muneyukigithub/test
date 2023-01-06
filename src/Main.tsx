@@ -1,5 +1,5 @@
 import { Link, NavLink } from 'react-router-dom'
-import { FC, ReactNode, useRef, useState } from 'react'
+import { createRef, FC, ReactNode, RefObject, useRef, useState } from 'react'
 import React from 'react'
 import SearchIcon from '@mui/icons-material/Search'
 import CssBaseline from '@mui/material/CssBaseline'
@@ -50,6 +50,7 @@ import { useAuth } from 'AuthContext'
 import MinPaper from 'MinPaper'
 import { Header } from 'Header'
 import { borderRadius } from '@mui/system'
+import { Sidebar } from 'Sidebar'
 
 //関数コンポーネントがchildrenを受け取る場合の型定義
 // type Props = {
@@ -382,6 +383,29 @@ const Main: React.FC = () => {
 
   }
 
+
+  // const elm = useRef<any>(null);
+  const taskRefs = useRef<RefObject<HTMLDivElement>[]>([])
+  tasks.forEach((_, index) => {
+    taskRefs.current[index] = createRef<HTMLDivElement>()
+  })
+
+  const handlescrollbutton = () => {
+
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    })
+  }
+
+  // const test1 = (event: any) => {
+  //   console.log(event);
+  //   if (elm.current) {
+  //     console.log(elm.current.getBoundingClientRect());
+  //   }
+  // }
+
+
   tasks.forEach((task, index) => {
     const edit = task.edit;
 
@@ -389,6 +413,8 @@ const Main: React.FC = () => {
 
       task.short ? <MinPaper taskname={task.task} changeEvent={changeshort} taskid={task.task_id} />
         : <Paper
+
+          ref={taskRefs.current[index]}
           elevation={3}
           sx={{
             // mb: 3,
@@ -399,8 +425,6 @@ const Main: React.FC = () => {
             flexDirection: 'column',
             minHeight: "240px",
             borderRadius: 3,
-
-
           }}
         >
 
@@ -425,6 +449,9 @@ const Main: React.FC = () => {
 
             }}
           >
+
+
+
 
             {
               edit ?
@@ -517,58 +544,66 @@ const Main: React.FC = () => {
   })
 
 
-  const TaskBottom = (
-    <Box>
-      <Button variant="contained"></Button>
-    </Box>
-  )
+
+  const drawerWidth = 240;
 
   return (
-    < Box sx={{ backgroundColor: '#EEEEEE', minHeight: "100vh", }}>
+    < Box sx={{ backgroundColor: '#EEEEEE', minHeight: "100vh", display: "flex" }}>
       <Header />
       <CssBaseline />
-      <Grid container spacing={0} sx={{ pt: 8 }}>
+
+      <Box
+        component="nav"
+        sx={{ p: 2, width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
+      >
+        <Sidebar tasks={tasks} ref={taskRefs} />
+
+        {/* <Drawer
+          variant="permanent"
+          sx={{
+            display: { xs: 'none', sm: 'block' },
+            '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
+          }}
+          open
+        >
+          <Sidebar tasks={tasks} ref={taskRefs} />
+        </Drawer> */}
+
+
+
+      </Box>
+
+      <Box
+        component="main"
+        sx={{ height: "100vh", mt: 8, p: 3, overflow: "scroll", flexGrow: 1, width: { sm: `calc(100% - ${drawerWidth}px)` } }}
+      >
+
+        {list}
+      </Box>
+
+
+
+
+
+
+
+
+
+      {/* <Grid container spacing={0} sx={{ pt: 8 }}>
         <Grid item xs={12} md={9}>
-          <Box
-          // sx={{
-          //   mx: 5,
-          //   mt: 1,
-          // }}
-          >
-            {/* <Typography
-              sx={{
-                mb: '30px',
-                fontSize: '30px',
-                fontFamily: 'Roboto, system-ui,Hiragino Kaku Gothic ProN,sans-serif;',
-              }}
-            >
-              タスクカード
-            </Typography> */}
-            {list}
-
-            {/* <Sample /> */}
-
-            <Fab color="primary" variant="extended" sx={{ mt: 3 }} onClick={addtask}>
-              <AddIcon />
-              Task
-            </Fab>
+          {list}
+          <Fab color="primary" variant="extended" sx={{ mt: 3 }} onClick={addtask}>
+            <AddIcon />
+            Task
+          </Fab>
+        </Grid>
+        <Grid item xs={0} md={3}>
+          <Box component="nav" sx={{ width: { xs: "0px", sm: "200px" }, flexShrink: { sm: 0 } }}>
+            <Sidebar tasks={tasks} ref={taskRefs} />
           </Box>
         </Grid>
+      </Grid> */}
 
-        <Grid item xs={0} md={3}>
-          <Paper elevation={3}
-            sx={{
-              height: "200px",
-              borderRadius: 5,
-              backgroundColor: "#FFF",
-              m: 3
-            }}
-
-
-          ></Paper>
-          {/* <Box sx={{ backgroundColor: '#EEEEEE', height: '100vh', minWidth: '' }}></Box> */}
-        </Grid>
-      </Grid>
     </Box >
   )
 }

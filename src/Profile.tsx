@@ -38,7 +38,29 @@ export const Profile = (props: any) => {
     const navigate = useNavigate()
     const Auth = useAuth();
     const url = "http://127.0.0.1:8000/api/v1/UserDeactivate/"
-    const UserDeactivate = async () => {
+
+    const handleDeactivate = async () => {
+        const activeuser = Auth.user
+        await userDeactivate()
+            .then((suc) => {
+                return Auth.logout()
+            }).then((suc) => {
+                navigate("/UserDeactivateComplete", { state: { username: activeuser } })
+            })
+            .catch(err => { return false })
+    }
+
+    const userDeactivate = async () => {
+        const result = await fetch(url, {
+            method: "POST",
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ "email": Auth.user })
+        }).then(success => true).catch((error) => false)
+    }
+
+
+
+    const _a = async () => {
         await fetch(url, {
             method: "POST",
             headers: { 'Content-Type': 'application/json' },
@@ -46,8 +68,7 @@ export const Profile = (props: any) => {
         }).then((res) => {
             if (res.status === 200) {
                 console.log(res.status);
-                // return Auth.logout()
-                return "e"
+                return Auth.logout()
                 // Promise.resolve(r)
                 // return
 
@@ -58,7 +79,8 @@ export const Profile = (props: any) => {
         }).then((res) => {
             console.log(res);
             if (res) {
-                navigate("/UserDeactivateComplete", { state: { user: res } })
+                navigate("/UserDeactivateComplete", { state: { username: res } })
+
             }
 
             // navigate("/UserDeactivateComplete")
@@ -93,7 +115,7 @@ export const Profile = (props: any) => {
                             {Auth.user}
                         </Typography>
                         <Box sx={{ borderTop: "1px solid gray", borderBottom: "1px solid gray", width: "100%", display: "flex", flexDirection: "column", alignItems: "center" }}>
-                            <Typography onClick={UserDeactivate} color="darkgrey" variant="h6" sx={{ display: "inline-block" }} gutterBottom>
+                            <Typography onClick={handleDeactivate} color="darkgrey" variant="h6" sx={{ display: "inline-block" }} gutterBottom>
                                 アカウントの削除
                             </Typography>
                         </Box>

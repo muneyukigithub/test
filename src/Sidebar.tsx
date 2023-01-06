@@ -1,26 +1,53 @@
-import React, { useState } from 'react'
-import { Button, Drawer } from '@mui/material'
+import React, { forwardRef, useState } from 'react'
+import { Button, Drawer, Paper, Typography } from '@mui/material'
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'
 import { mainListItems, secondaryListItems } from './listi'
 
-const Sidebar: React.FC = () => {
-  const [op, setop] = useState(true)
-  const toggleopen = () => {
-    setop(!op)
-    console.log(op)
+export const Sidebar: React.FC<any> = forwardRef((props, ref: any) => {
+
+
+  // console.log(ref.current[0].current.getBoundingClientRect())
+  console.log(props.tasks)
+  const test1 = (event: any) => {
+    console.log(event.target.id)
+    // console.log(ref.current.getBoundingClientRect());
+
+    // console.log(ref.current[0].getBoundingClientRect());
+
+    if (ref) {
+      console.log(ref.current[event.target.id].current.getBoundingClientRect().top)
+      window.scrollTo({
+        top: ref.current[event.target.id].current.getBoundingClientRect().top,
+        behavior: 'smooth'
+      })
+    }
   }
 
   return (
-    <div>
-      <Drawer anchor="left" open={op} onClose={toggleopen}>
-        <button onClick={toggleopen}>
-          <ChevronLeftIcon />
-        </button>
+    <Paper elevation={3}
+      sx={{
+        display: { xs: "none", sm: "block" },
+        position: "fixed",
+        top: 110,
+        left: 30,
+        // height: "50vh",
+        height: "70vh",
+        // overflow: "scroll",
+        p: "1rem",
+        width: "240px",
+        borderRadius: 5,
+        backgroundColor: "#FFF",
+      }}>
 
-        {mainListItems}
-      </Drawer>
-    </div>
-  )
-}
+      {props.tasks.map((value: any, index: any) => (
+        <Typography id={index} onClick={test1}>
+          {value.task}
+        </Typography>
+      )
+      )}
 
-export default Sidebar
+
+      {/* <button onClick={test1} >ボタン</button> */}
+
+    </Paper >)
+})
